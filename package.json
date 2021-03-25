@@ -4,6 +4,7 @@
   "description": "Serverless step functions",
   "main": "serverless.ts",
   "scripts": {
+    "start": "sls offline",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "engines": {
@@ -19,6 +20,7 @@
     "json-schema-to-ts": "^1.5.0",
     "serverless": "^2.31.0",
     "serverless-functions-base-path": "^1.0.32",
+    "serverless-offline": "^6.8.0",
     "serverless-webpack": "^5.3.5",
     "ts-loader": "^8.0.15",
     "ts-node": "^9.1.1",

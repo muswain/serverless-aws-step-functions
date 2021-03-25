@@ -1,7 +1,5 @@
 import type { AWS } from '@serverless/typescript';
 
-
-
 const serverlessConfiguration: AWS = {
   service: 'serverless-step-functions',
   frameworkVersion: '>=2.30.0',
@@ -9,11 +7,15 @@ const serverlessConfiguration: AWS = {
   custom: {
     webpack: {
       webpackConfig: './webpack.config.js',
-      includeModules: true
+      includeModules: true,
     },
-    functionsBasePath: 'src/functions'
+    functionsBasePath: 'src/functions',
+    'serverless-offline': {
+      httpPort: 3000,
+      host: 'localhost',
+    },
   },
-  plugins: ['serverless-webpack', 'serverless-functions-base-path'],
+  plugins: ['serverless-functions-base-path', 'serverless-webpack', 'serverless-offline'],
   provider: {
     name: 'aws',
     runtime: 'nodejs14.x',
@@ -34,20 +36,26 @@ const serverlessConfiguration: AWS = {
   },
   functions: {
     SayHello: {
-      handler: 'hello-handler.sayHello',
+      handler: '/hello-handler.sayHello',
       description: 'hello handler function',
       events: [
         {
           http: {
             method: 'get',
             path: 'hello',
-            cors: true
-          }
-        }
-      ]
-    }
+            cors: true,
+            request: {
+              parameters: {
+                querystrings: {
+                  name: true,
+                },
+              },
+            },
+          },
+        },
+      ],
+    },
   },
-
-}
+};
 
 module.exports = serverlessConfiguration;
