@@ -4,7 +4,7 @@
   "description": "Serverless step functions",
   "main": "serverless.ts",
   "scripts": {
-    "start": "sls offline start",
+    "start": "sls offline",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "engines": {
