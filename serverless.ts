@@ -15,11 +15,11 @@ const serverlessConfiguration: AWS = {
       host: 'localhost',
     },
   },
-  plugins: ['serverless-functions-base-path', 'serverless-webpack', 'serverless-offline'],
+  plugins: ['serverless-functions-base-path', 'serverless-step-functions', 'serverless-webpack', 'serverless-offline'],
   provider: {
     name: 'aws',
     runtime: 'nodejs14.x',
-    memorySize: 128,
+    memorySize: 256,
     stage: 'dev',
     region: 'ap-southeast-2',
     apiGateway: {
