@@ -1,21 +1,25 @@
 import type { AWS } from '@serverless/typescript';
 
-import { hello } from './src/functions';
+
 
 const serverlessConfiguration: AWS = {
   service: 'serverless-step-functions',
-  frameworkVersion: '2',
+  frameworkVersion: '>=2.30.0',
+
   custom: {
     webpack: {
       webpackConfig: './webpack.config.js',
       includeModules: true
-    }
+    },
+    functionsBasePath: 'src/functions'
   },
-  plugins: ['serverless-webpack'],
+  plugins: ['serverless-webpack', 'serverless-functions-base-path'],
   provider: {
     name: 'aws',
     runtime: 'nodejs14.x',
-    
+    memorySize: 128,
+    stage: 'dev',
+    region: 'ap-southeast-2',
     apiGateway: {
       minimumCompressionSize: 1024,
       shouldStartNameWithService: true,
@@ -25,7 +29,24 @@ const serverlessConfiguration: AWS = {
     },
     lambdaHashingVersion: '20201221',
   },
-  functions: { hello },
+  package: {
+    individually: true,
+  },
+  functions: {
+    SayHello: {
+      handler: 'hello-handler.sayHello',
+      description: 'hello handler function',
+      events: [
+        {
+          http: {
+            method: 'get',
+            path: 'hello',
+            cors: true
+          }
+        }
+      ]
+    }
+  },
 
 }
 
