@@ -49,9 +49,10 @@ provider:
 
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+    USER_TABLE: ${self:custom.resourcePrefix}-user
 
 functions:
   - ${file(./resources/functions.yml)}
 
 resources:
-  - ${file(./resources/dynamodb-tables.yml)}
+  - ${file(./resources/dynamodb.yml)}

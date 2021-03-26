@@ -35,11 +35,14 @@ The project code base is mainly located within the `src` folder. This folder is 
 
 ```
 .
+├── resources
+|   ├── functions.yml
+|   ├── dynamodb.yml
 ├── src
 │   ├── functions            # Lambda configuration and source code folder
 │   │   ├── hello-handler.ts
 ├── package.json
-├── serverless.ts            # Serverless service file
+├── serverless.yml           # Serverless service file
 ├── tsconfig.json            # Typescript compiler configuration
 └── webpack.config.js        # Webpack configuration
 ```
