@@ -1,0 +1,13 @@
+SayHello:
+  name: ${self:custom.resourcePrefix}-SayHello
+  handler: /hello-handler.sayHello
+  description: hello handler function
+  events:
+    - http:
+        method: get
+        path: hello
+        cors: true
+        request:
+          parameters:
+            querystrings:
+              name: true
