@@ -4,7 +4,7 @@
   "description": "Serverless step functions",
   "main": "serverless.ts",
   "scripts": {
-    "start": "sls offline",
+    "start": "sls offline start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "engines": {
@@ -12,10 +12,10 @@
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.9.0",
+    "@aws-sdk/lib-dynamodb": "^3.10.0",
     "source-map-support": "^0.5.19"
   },
   "devDependencies": {
-    "@serverless/typescript": "^2.30.3",
     "@types/aws-lambda": "^8.10.71",
     "@types/node": "^14.14.35",
     "json-schema-to-ts": "^1.5.0",
@@ -32,6 +32,6 @@
     "webpack": "^5.20.2",
     "webpack-node-externals": "^2.5.2"
   },
-  "author": "T",
+  "author": "Mrutyunjay",
   "license": "MIT"
 }

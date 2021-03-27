@@ -1,9 +1,9 @@
 Resources:
   UserTable:
     Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
     Properties:
       TableName: ${self:custom.resourcePrefix}-user
-      DeletionPolicy: Retain
       AttributeDefinitions:
         - AttributeName: pk
           AttributeType: S

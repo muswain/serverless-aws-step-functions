@@ -22,6 +22,8 @@ custom:
     noPrependStageInUrl: true
 
   dynamodb:
+    stages:
+      - dev
     start:
       port: 8000
       inMemory: true
@@ -33,12 +35,18 @@ custom:
       # Uncomment only if you already have a DynamoDB running locally
       # noStart: true
 
+    seed:
+      test:
+        sources:
+          - table: ${self:custom.resourcePrefix}-user
+            sources: [./seed/users.json]
+
 package:
   individually: true
 
 provider:
   name: aws
-  runtime: nodejs14.x
+  runtime: nodejs12.x
   memorySize: 256
   stage: dev
   region: ap-southeast-2

@@ -1,0 +1,20 @@
+[
+  {
+    "pk": "John",
+    "sk": "John",
+    "city": "perth",
+    "state": "wa"
+  },
+  {
+    "pk": "smith",
+    "sk": "smith",
+    "city": "adelaide",
+    "state": "adelaide"
+  },
+  {
+    "pk": "julie",
+    "sk": "julie",
+    "city": "sydney",
+    "state": "wa"
+  }
+]

@@ -1,7 +1,14 @@
-import { DynamoDBClient, QueryCommand } from '@aws-sdk/client-dynamodb';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient, QueryCommand } from '@aws-sdk/lib-dynamodb';
 
-export const queryUsers = async (name: string) => {
-  const client = new DynamoDBClient({ endpoint: 'localhost:8000' });
+const region = 'ap-southeast-2';
+let client = process.env.IS_OFFLINE
+  ? new DynamoDBClient({ region, endpoint: 'localhost:8000' })
+  : new DynamoDBClient({ region });
+
+const ddbDocClient = DynamoDBDocumentClient.from(client);
+
+export const queryUsers = async (name: string): Promise<User[]> => {
   const queryCommand = new QueryCommand({
     TableName: process.env.USER_TABLE,
     KeyConditionExpression: 'pk = :pk',
@@ -10,11 +17,16 @@ export const queryUsers = async (name: string) => {
     },
   });
 
-  try {
-    const response = await client.send(queryCommand);
-    console.info(response);
-    return response;
-  } catch (err) {
-    console.error(err);
-  }
+  const { Items } = await ddbDocClient.send(queryCommand);
+
+  const users: User[] = Items.map((item) => {
+    const { pk: name, city, state } = item;
+    return {
+      name,
+      city,
+      state,
+    };
+  });
+
+  return users;
 };
