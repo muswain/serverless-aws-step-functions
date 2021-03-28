@@ -20,10 +20,10 @@ Depending on your preferred package manager, follow the instructions below to de
 
 ### Locally
 
-In order to test the hello function locally, run the following command:
+In order to test the user function locally, run the following command:
 
-- `npx sls invoke local -f sayHello` if you're using NPM
-- `yarn sls invoke local -f sayHello` if you're using Yarn
+- `npx sls invoke local -f GetUsers` if you're using NPM
+- `yarn sls invoke local -f GetUsers` if you're using Yarn
 
 Check the [sls invoke local command documentation](https://www.serverless.com/framework/docs/providers/aws/cli-reference/invoke-local/) for more information.
 
@@ -40,13 +40,9 @@ The project code base is mainly located within the `src` folder. This folder is 
 |   ├── dynamodb.yml
 ├── src
 │   ├── functions            # Lambda configuration and source code folder
-│   │   ├── hello-handler.ts
+│   │   ├── user-handler.ts
 ├── package.json
 ├── serverless.yml           # Serverless service file
 ├── tsconfig.json            # Typescript compiler configuration
 └── webpack.config.js        # Webpack configuration
 ```
-
-### 3rd party libraries
-
-- [@serverless/typescript](https://github.com/serverless/typescript) - provides up-to-date TypeScript definitions for the `serverless.ts` service file

@@ -3,6 +3,7 @@ frameworkVersion: '>=2.30.0'
 
 plugins:
   - serverless-functions-base-path
+  - serverless-iam-roles-per-function
   - serverless-dynamodb-local
   - serverless-webpack
   - serverless-offline

@@ -1,20 +1,23 @@
 [
   {
-    "pk": "John",
-    "sk": "John",
+    "pk": "john@gmail.com",
+    "sk": "profile",
+    "name": "john cena",
     "city": "perth",
-    "state": "wa"
+    "country": "australia"
   },
   {
-    "pk": "smith",
-    "sk": "smith",
-    "city": "adelaide",
-    "state": "adelaide"
+    "pk": "smith@a.com",
+    "sk": "profile",
+    "name": "john smith",
+    "city": "mumbai",
+    "country": "india"
   },
   {
-    "pk": "julie",
-    "sk": "julie",
-    "city": "sydney",
-    "state": "wa"
+    "pk": "julie@b.com",
+    "sk": "profile",
+    "name": "julie smith",
+    "city": "vancouver",
+    "country": "canada"
   }
 ]
