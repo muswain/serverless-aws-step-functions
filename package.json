@@ -5,10 +5,13 @@
   "main": "serverless.ts",
   "scripts": {
     "start": "sls offline start",
-    "test": "mocha -r ts-node/register ./src/**/*.spec.ts"
+    "test": "cross-env TS_NODE_PROJECT=\"tsconfig.test.json\" mocha -r ts-node/register src/**/*.spec.ts"
   },
   "engines": {
     "node": ">=14.15.0"
+  },
+  "mocha": {
+    "spec": "./src/**/*.spec.ts"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.10.0",
@@ -21,6 +24,7 @@
     "@types/mocha": "^8.2.2",
     "@types/node": "^14.14.35",
     "chai": "^4.3.4",
+    "cross-env": "^7.0.3",
     "json-schema-to-ts": "^1.5.0",
     "mocha": "^6.2.3",
     "serverless": "^2.31.0",
