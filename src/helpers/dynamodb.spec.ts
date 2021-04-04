@@ -3,7 +3,7 @@ import { expect, use } from 'chai';
 import * as sinon from 'sinon';
 import * as sinonChai from 'sinon-chai';
 use(sinonChai);
-import { queryUsers } from './dynamodb';
+import { putUser, queryUsers } from './dynamodb';
 
 describe('dynamodb helper', () => {
   describe('queryUsers', () => {
@@ -13,7 +13,6 @@ describe('dynamodb helper', () => {
     before(() => (process.env.USER_TABLE = 'users'));
 
     beforeEach(() => {
-      process.env.USER_TABLE = 'users';
       queryStub = sandbox.stub(DynamoDBDocumentClient.prototype, 'send');
     });
 
@@ -36,6 +35,44 @@ describe('dynamodb helper', () => {
           KeyConditionExpression: 'sk = :pk AND begins_with(#user, :name)',
           ExpressionAttributeNames: { '#user': 'name' },
           ExpressionAttributeValues: { ':pk': 'profile', ':name': 'test user' },
+        },
+      });
+    });
+  });
+
+  describe('putUser', () => {
+    let putStub: sinon.SinonStub;
+    const sandbox = sinon.createSandbox();
+    const mockUser = { email: 'test@exmaple.com', city: 'perth', country: 'australia', name: 'tom' };
+    before(() => (process.env.USER_TABLE = 'users'));
+
+    beforeEach(() => {
+      putStub = sandbox.stub(DynamoDBDocumentClient.prototype, 'send');
+    });
+
+    afterEach(() => sandbox.restore());
+
+    it('should add the user successfully', async () => {
+      putStub.resolves();
+      const response = await putUser(mockUser);
+      expect(response).to.be.undefined;
+    });
+
+    it('should add item in ddb with the required params', async () => {
+      putStub.resolves();
+      await putUser(mockUser);
+      expect(putStub).to.have.been.calledOnce;
+      expect(putStub).to.have.been.calledWithMatch({
+        input: {
+          TableName: 'users',
+          Item: {
+            name: 'tom',
+            city: 'perth',
+            country: 'australia',
+            pk: 'test@exmaple.com',
+            sk: 'profile',
+          },
+          ConditionExpression: 'attribute_not_exists(pk)',
         },
       });
     });

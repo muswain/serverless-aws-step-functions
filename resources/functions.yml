@@ -1,13 +1,13 @@
 GetUsers:
-  name: ${self:custom.resourcePrefix}-GetUsers
+  name: ${self:custom.resourcePrefix}-getUsers
   handler: /user-handler.getUsers
   description: Gets a list of users whose name startswith the given string
-  iamRoleStatementsName: ${self:custom.resourcePrefix}-GetUsers-role
+  iamRoleStatementsName: ${self:custom.resourcePrefix}-getUsers-role
   iamRoleStatements:
     - Effect: Allow
       Action:
         - dynamodb:Query
-      Resource: !Sub arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${self:custom.resourcePrefix}-user
+      Resource: !Sub arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${self:custom.resourcePrefix}-user/index/*
 
   events:
     - http:
@@ -18,3 +18,20 @@ GetUsers:
           parameters:
             querystrings:
               name: true
+
+AddUser:
+  name: ${self:custom.resourcePrefix}-addUser
+  handler: /user-handler.addUser
+  description: adds a new user
+  iamRoleStatementsName: ${self:custom.resourcePrefix}-addUser-role
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:PutItem
+      Resource: !Sub arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${self:custom.resourcePrefix}-user
+
+  events:
+    - http:
+        method: post
+        path: users
+        cors: true
