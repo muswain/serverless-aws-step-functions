@@ -36,11 +36,16 @@ export const queryUsers = async (name: string): Promise<User[] | []> => {
  * @param user
  */
 export const putUser = async (user: User) => {
-  const { name, city, country, email: pk } = user;
+  const { email } = user;
+  const addUserItem: UserDBItem = {
+    ...user,
+    pk: email,
+    sk: 'profile',
+  };
 
   const putCommand = new PutCommand({
     TableName: process.env.USER_TABLE,
-    Item: { name, city, country, pk, sk: 'profile' },
+    Item: addUserItem,
     ConditionExpression: 'attribute_not_exists(pk)',
   });
 

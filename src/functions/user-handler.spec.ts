@@ -1,42 +1,88 @@
+import { APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
 import { expect, use } from 'chai';
 import { cloneDeep } from 'lodash';
 import * as sinon from 'sinon';
 import * as sinonChai from 'sinon-chai';
 import * as dynamodb from '../helpers/dynamodb';
-import { getUsers, GetUsersEvent } from './user-handler';
+import { addUser, AddUserEvent, getUsers, GetUsersEvent } from './user-handler';
 use(sinonChai);
 
-describe('getUsers()', () => {
-  let queryUsersStub: sinon.SinonStub;
-  const sandbox = sinon.createSandbox();
+describe('user-handler', () => {
+  describe('getUsers()', () => {
+    let putUserStub: sinon.SinonStub;
+    const sandbox = sinon.createSandbox();
 
-  const event: GetUsersEvent = {
-    queryStringParameters: {
-      name: 'test-user',
-    },
-  };
+    const event: GetUsersEvent = {
+      queryStringParameters: {
+        name: 'test-user',
+      },
+    };
 
-  beforeEach(() => {
-    queryUsersStub = sandbox.stub(dynamodb, 'queryUsers');
+    beforeEach(() => {
+      putUserStub = sandbox.stub(dynamodb, 'queryUsers');
+    });
+
+    afterEach(() => sandbox.restore());
+
+    it('should call queryUsers() with the required params', async () => {
+      putUserStub.resolves([{ email: 'test@example.com', name: 'test', city: 'perth', country: 'australia' }]);
+      const response = (await getUsers(event)) as APIGatewayProxyStructuredResultV2;
+
+      expect(response.statusCode).to.equal(200);
+      expect(JSON.parse(response.body)).to.deep.equal([
+        { email: 'test@example.com', name: 'test', city: 'perth', country: 'australia' },
+      ]);
+    });
+
+    it('should throw error when the name query params is not provided', async () => {
+      const eventWithoutQueryParams = cloneDeep(event);
+      eventWithoutQueryParams.queryStringParameters = null;
+      const response = (await getUsers(eventWithoutQueryParams)) as APIGatewayProxyStructuredResultV2;
+
+      expect(response.statusCode).to.equal(400);
+      expect(JSON.parse(response.body)).to.deep.equal({ message: 'name is required' });
+    });
   });
 
-  afterEach(() => sandbox.restore());
+  describe('addUser()', () => {
+    const mockUser = { email: 'test@exmaple.com', city: 'perth', country: 'australia', name: 'tom' };
 
-  it('should call queryUsers() helper with the required param', async () => {
-    queryUsersStub.resolves([{ email: 'test@example.com', name: 'test', city: 'perth', country: 'australia' }]);
-    const response = await getUsers(event);
+    let putUserStub: sinon.SinonStub;
+    const sandbox = sinon.createSandbox();
 
-    expect(response.statusCode).to.equal(200);
-    expect(JSON.parse(response.body)).to.deep.equal([
-      { email: 'test@example.com', name: 'test', city: 'perth', country: 'australia' },
-    ]);
-  });
+    const event: AddUserEvent = {
+      body: JSON.stringify(mockUser),
+    };
 
-  it('should throw error when the name query params is not provided', async () => {
-    const eventWithoutQueryParams = cloneDeep(event);
-    eventWithoutQueryParams.queryStringParameters = null;
-    const response = await getUsers(eventWithoutQueryParams);
-    expect(response.statusCode).to.equal(400);
-    expect(JSON.parse(response.body)).to.deep.equal({ message: 'name is required' });
+    beforeEach(() => {
+      putUserStub = sandbox.stub(dynamodb, 'putUser');
+    });
+
+    afterEach(() => sandbox.restore());
+
+    it('should call putUser() with the required params', async () => {
+      putUserStub.resolves();
+      const response = (await addUser(event)) as APIGatewayProxyStructuredResultV2;
+
+      expect(putUserStub).to.have.been.calledWith({
+        email: 'test@exmaple.com',
+        city: 'perth',
+        country: 'australia',
+        name: 'tom',
+      });
+      expect(response.statusCode).to.equal(200);
+      expect(JSON.parse(response.body)).to.deep.equal({ message: 'user added successfully' });
+    });
+
+    it('should throw error when the user schema is not valid', async () => {
+      const eventInvalid = cloneDeep(event);
+      const clonedUser = { ...mockUser };
+      delete clonedUser.email;
+
+      eventInvalid.body = JSON.stringify({ clonedUser });
+      const response = (await addUser(eventInvalid)) as APIGatewayProxyStructuredResultV2;
+      expect(response.statusCode).to.equal(400);
+      expect(JSON.parse(response.body)).to.deep.equal({ message: 'data should NOT have additional properties' });
+    });
   });
 });

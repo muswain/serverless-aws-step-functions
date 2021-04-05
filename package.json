@@ -17,6 +17,7 @@
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.10.0",
     "@aws-sdk/lib-dynamodb": "^3.10.0",
+    "ajv": "^6.12.6",
     "source-map-support": "^0.5.19"
   },
   "devDependencies": {

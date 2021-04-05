@@ -44,6 +44,7 @@ describe('dynamodb helper', () => {
     let putStub: sinon.SinonStub;
     const sandbox = sinon.createSandbox();
     const mockUser = { email: 'test@exmaple.com', city: 'perth', country: 'australia', name: 'tom' };
+
     before(() => (process.env.USER_TABLE = 'users'));
 
     beforeEach(() => {

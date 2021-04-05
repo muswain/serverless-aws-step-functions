@@ -1,11 +1,12 @@
-import { APIGatewayProxyEventV2, APIGatewayProxyResult } from 'aws-lambda';
+import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda';
 import { ok } from 'assert';
 import { putUser, queryUsers } from '../helpers/dynamodb';
+import { validateUser } from '../helpers/validation-util';
 
 export type GetUsersEvent = Pick<APIGatewayProxyEventV2, 'queryStringParameters'>;
 export type AddUserEvent = Pick<APIGatewayProxyEventV2, 'body'>;
 
-export const getUsers = async (event: GetUsersEvent): Promise<APIGatewayProxyResult> => {
+export const getUsers = async (event: GetUsersEvent): Promise<APIGatewayProxyResultV2<User>> => {
   const name = event.queryStringParameters?.['name'];
 
   try {
@@ -21,16 +22,17 @@ export const getUsers = async (event: GetUsersEvent): Promise<APIGatewayProxyRes
   }
 };
 
-export const addUser = async (event: AddUserEvent): Promise<APIGatewayProxyResult> => {
+export const addUser = async (event: AddUserEvent): Promise<APIGatewayProxyResultV2<Response>> => {
   const body = event.body;
 
   try {
     ok(body, 'body is required');
 
     const user = JSON.parse(body);
+    validateUser(user);
 
     await putUser(user);
-    return { statusCode: 200, body: 'user added successfully' };
+    return { statusCode: 200, body: JSON.stringify({ message: 'user added successfully' }) };
   } catch (err) {
     return {
       statusCode: 400,

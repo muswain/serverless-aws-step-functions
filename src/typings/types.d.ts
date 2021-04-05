@@ -8,3 +8,7 @@ interface User {
 type UserDBItem = User & { pk: string; sk: string };
 
 type UserTypes = 'profile';
+
+interface Response {
+  message: string;
+}
