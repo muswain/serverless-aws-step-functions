@@ -6,13 +6,17 @@
   "scripts": {
     "start": "sls offline start",
     "test": "cross-env TS_NODE_PROJECT=\"tsconfig.test.json\" mocha -r ts-node/register",
-    "coverage": "nyc npm test"
+    "coverage": "nyc npm test",
+    "prepare": "husky install"
   },
   "engines": {
     "node": ">=14.15.0"
   },
   "mocha": {
     "spec": "./src/**/*.spec.ts"
+  },
+  "lint-staged": {
+    "*.js": "eslint --fix"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.254.0",
@@ -33,6 +37,7 @@
     "chai-subset": "^1.6.0",
     "cross-env": "^7.0.3",
     "json-schema-to-ts": "^2.6.2",
+    "lint-staged": "^13.1.0",
     "lodash": "^4.17.21",
     "mocha": "^10.2.0",
     "nyc": "^15.1.0",
@@ -50,7 +55,8 @@
     "tsconfig-paths-webpack-plugin": "^4.0.0",
     "typescript": "^4.9.4",
     "webpack": "^5.75.0",
-    "webpack-node-externals": "^3.0.0"
+    "webpack-node-externals": "^3.0.0",
+    "husky": "^8.0.0"
   },
   "author": "Mrutyunjay",
   "license": "MIT"
