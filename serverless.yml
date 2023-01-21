@@ -1,5 +1,5 @@
 service: serverless-step-functions
-frameworkVersion: '=2.51.2'
+frameworkVersion: '>=3.26.0'
 
 plugins:
   - serverless-functions-base-path
@@ -47,7 +47,7 @@ package:
 
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: nodejs16.x
   memorySize: 256
   stage: dev
   region: ap-southeast-2
